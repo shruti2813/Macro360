@@ -1,15 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Macro360</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Macro360 | Economic Intelligence Hub</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+body{
+background:#0b1020;
+color:white;
+}
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:40px;
+background:linear-gradient(135deg,#071326,#0f2745);
+}
+
+.hero h1{
+font-size:70px;
+margin-bottom:15px;
+}
+
+.hero h2{
+font-size:28px;
+font-weight:300;
+margin-bottom:20px;
+color:#d0d8e8;
+}
+
+.hero p{
+max-width:900px;
+line-height:1.8;
+color:#aeb8c7;
+font-size:18px;
+}
+
+.button{
+margin-top:35px;
+padding:15px 35px;
+background:#2f80ed;
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-size:18px;
+font-weight:600;
+transition:0.3s;
+}
+
+.button:hover{
+background:#1f6ad1;
+}
+
+.section{
+padding:80px 60px;
+}
+
+.section h2{
+font-size:36px;
+margin-bottom:25px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
+}
+
+.card{
+background:#121c31;
+padding:25px;
+border-radius:15px;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.card h3{
+margin-bottom:12px;
+}
+
+.dashboard{
+height:100vh;
+padding:20px;
+}
+
+iframe{
+width:100%;
+height:100%;
+border:none;
+border-radius:12px;
+}
+
+</style>
 </head>
+
 <body>
+
+<section class="hero">
 
 <h1>🌍 Macro360</h1>
 
-<p>Economic Intelligence Hub</p>
+<h2>Economic Intelligence Hub</h2>
 
-<p>Powered by Power BI</p>
+<p>
+Transforming macroeconomic indicators into actionable business insights.
+Explore global growth trends, inflationary pressures, labor market dynamics,
+trade performance and leading economic indicators through an integrated analytics experience.
+</p>
+
+#dashboard
+Launch Dashboard
+</a>
+
+</section>
+
+<section class="section">
+
+<h2>Key Intelligence Areas</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Global Growth</h3>
+<p>GDP trends across major economies and regions.</p>
+</div>
+
+<div class="card">
+<h3>Inflation Monitoring</h3>
+<p>Track consumer price trends and monetary pressures.</p>
+</div>
+
+<div class="card">
+<h3>Labor Markets</h3>
+<p>Monitor employment and workforce dynamics.</p>
+</div>
+
+<div class="card">
+<h3>Trade & Industry</h3>
+<p>Analyze exports, production and industrial activity.</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="dashboard" class="dashboard">
+
+<iframe
+src="https://app.powerbi.com/reportEmbed?reportId=c11e83d0-1dd5-44e9-a8be-5c0c4171bdac&autoAuth=true&ctid=36da45f1-dd2c-4d1f-af13-5abe46b99921"
+allowfullscreen="true">
+</iframe>
+
+</section>
 
 </body>
 </html>
