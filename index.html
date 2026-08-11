@@ -14,20 +14,18 @@ https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.jsscript>
 
 <style>
 :root {
-    --bg: #f4f6f8;
-    --ink: #101820;
-    --muted: #65717f;
-    --panel: #ffffff;
-    --panel-dark: #111820;
-    --panel-soft: #f8fafc;
-    --line: #d9dee5;
     --green: #86bc25;
-    --green-dark: #174c2a;
-    --teal: #1bb7aa;
-    --blue: #235789;
-    --red: #c9343a;
-    --amber: #c98b1b;
-    --shadow: 0 18px 44px rgba(16,24,32,0.12);
+    --dark-green: #145a2a;
+    --black: #070707;
+    --header: #242424;
+    --text: #ffffff;
+    --muted: #b9c3cc;
+    --panel: #ffffff;
+    --map-land: #aeb7bf;
+    --map-border: #8f9aa3;
+    --red: #e31b2f;
+    --blue: #2f80c9;
+    --neutral: #93a0aa;
 }
 
 * {
@@ -37,68 +35,655 @@ https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.jsscript>
 }
 
 body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: Inter, Segoe UI, Arial, sans-serif;
+    background: #f3f4f5;
+    font-family: Inter, Arial, sans-serif;
+    color: #111;
 }
 
-.page {
-    width: min(1460px, calc(100% - 56px));
+/* Main shell */
+.shell {
+    width: min(1500px, calc(100% - 48px));
     margin: 28px auto;
-    background: var(--panel);
-    box-shadow: var(--shadow);
-    border: 1px solid #e2e6eb;
+    background: #ffffff;
+    box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+    border: 1px solid #d8dde2;
 }
 
-/* HEADER */
+/* Header */
 .header {
+    background: var(--header);
+    color: var(--text);
+    padding: 26px 38px 22px;
     display: grid;
-    grid-template-columns: 220px 1fr 220px;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    min-height: 78px;
-    background: linear-gradient(90deg, #123f23, #155a2d);
-    color: #fff;
-    padding: 0 28px;
-    border-bottom: 5px solid var(--green);
+    border-bottom: 4px solid var(--green);
 }
 
-.logo {
-    font-size: 26px;
+.header-left h1 {
+    font-size: 30px;
     font-weight: 800;
-    letter-spacing: -0.6px;
+    letter-spacing: -0.8px;
 }
 
-.logo span {
+.header-left p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.header-right button {
+    height: 42px;
+    padding: 0 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: transparent;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.header-right button:hover {
+    border-color: var(--green);
     color: var(--green);
 }
 
-.header-center {
-    text-align: center;
+/* Control ribbon */
+.controls {
+    background: var(--black);
+    border-bottom: 4px solid var(--green);
+    padding: 22px 38px;
 }
 
-.header-center h1 {
-    font-size: 15px;
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.metric-btn {
+    height: 40px;
+    border: 1px solid #2f3538;
+    background: #2fb8ae;
+    color: #ffffff;
+    font-size: 11px;
     font-weight: 800;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
+    cursor: pointer;
+    letter-spacing: -0.1px;
 }
 
-.header-center p {
-    margin-top: 6px;
+.metric-btn.active {
+    background: #333333;
+    border-color: var(--green);
+    box-shadow: inset 0 -3px 0 var(--green);
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: 180px 180px 220px 220px 1fr;
+    gap: 24px;
+    align-items: end;
+}
+
+.filter label {
+    display: block;
+    color: #f1f4f6;
     font-size: 13px;
-    color: rgba(255,255,255,0.82);
-    font-style: italic;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.header-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+.filter select {
+    width: 100%;
+    height: 44px;
+    border-radius: 3px;
+    border: 1px solid #c9ced3;
+    background: #ffffff;
+    color: #27313a;
+    font-size: 14px;
+    padding: 0 12px;
+    outline: none;
 }
 
-.header-actions button {
-    border: 1px solid rgba(255,255,255,0.32);
-    background: transparent;
-    color: #fff;
+.source-badge {
+    justify-self: end;
+    min-width: 245px;
+    height: 38px;
+    padding: 0 18px;
     border-radius: 999px;
-  
+    background: rgba(134,188,37,0.16);
+    color: #d7ef9d;
+    border: 1px solid rgba(134,188,37,0.28);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* Map area */
+.map-section {
+    background: #ffffff;
+    padding: 0;
+    position: relative;
+}
+
+.map-title-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 18px;
+    align-items: center;
+    padding: 18px 38px 12px;
+    background: #ffffff;
+}
+
+.map-title-row h2 {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1d252d;
+    letter-spacing: -0.3px;
+}
+
+.map-title-row p {
+    margin-top: 5px;
+    color: #6e7a86;
+    font-size: 13px;
+}
+
+.kpi-strip {
+    display: flex;
+    gap: 22px;
+    font-size: 12px;
+    color: #39434d;
+}
+
+.kpi-strip strong {
+    display: block;
+    font-size: 18px;
+    color: #151b20;
+    margin-top: 3px;
+}
+
+#worldMap {
+    width: 100%;
+    height: 575px;
+    background: #ffffff;
+}
+
+/* Bottom legend */
+.legend {
+    min-height: 58px;
+    background: #050505;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    padding: 0 38px;
+    font-size: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+}
+
+.green { background: var(--green); }
+.red { background: var(--red); }
+.blue { background: var(--blue); }
+.grey { background: var(--neutral); }
+
+/* Insight strip */
+.insight-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 28px;
+    padding: 22px 38px 28px;
+    background: #ffffff;
+    border-top: 1px solid #e1e5e8;
+}
+
+.insight-block h3 {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1b2229;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+}
+
+.insight-block p {
+    font-size: 13px;
+    color: #58636f;
+    line-height: 1.6;
+}
+
+.powerbi-btn {
+    justify-self: end;
+    align-self: center;
+    height: 42px;
+    padding: 0 22px;
+    border: 0;
+    border-radius: 4px;
+    background: var(--dark-green);
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(20,90,42,0.25);
+}
+
+.powerbi-btn:hover {
+    background: #1b7035;
+}
+
+/* Tooltip style override handled by ECharts */
+
+@media (max-width: 1000px) {
+    .shell {
+        width: 100%;
+        margin: 0;
+    }
+
+    .header,
+    .map-title-row,
+    .insight-row {
+        grid-template-columns: 1fr;
+    }
+
+    .metrics,
+    .filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .source-badge {
+        justify-self: start;
+    }
+
+    .kpi-strip {
+        flex-wrap: wrap;
+    }
+
+    #worldMap {
+        height: 520px;
+    }
+
+    .legend {
+        flex-wrap: wrap;
+        padding: 18px 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+
+    <header class="header">
+        <div class="header-left">
+            <h1>Macro360</h1>
+            <p>Global economic signals across growth, inflation, trade, labor and activity indicators</p>
+        </div>
+
+        <div class="header-right">
+            <button onclick="openPowerBI()">Open Power BI View</button>
+        </div>
+    </header>
+
+    <section class="controls">
+
+        <div class="metrics">
+            <button class="metric-btn active" data-metric="exports">Exports (% GDP)</button>
+            <button class="metric-btn" data-metric="gdp">GDP Growth (%)</button>
+            <button class="metric-btn" data-metric="inflation">Inflation (%)</button>
+            <button class="metric-btn" data-metric="pmi">PMI</button>
+            <button class="metric-btn" data-metric="population">Population Growth (%)</button>
+            <button class="metric-btn" data-metric="unemployment">Unemployment Rate (%)</button>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter">
+                <label>Year</label>
+                <select id="yearSelect">
+                    <option selected>2024</option>
+                    <option>2023</option>
+                    <option>2022</option>
+                    <option>2021</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label>Region</label>
+                <select id="regionSelect">
+                    <option selected>All</option>
+                    <option>North America</option>
+                    <option>Europe</option>
+                    <option>Asia Pacific</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label>Movement</label>
+                <select id="movementSelect">
+                    <option selected>All</option>
+                    <option>Increase</option>
+                    <option>Decline</option>
+                    <option>Stable</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label>Display</label>
+                <select id="displaySelect">
+                    <option selected>Magnitude circles</option>
+                    <option>Compact markers</option>
+                </select>
+            </div>
+
+            <div class="source-badge">Data source: sample preview</div>
+        </div>
+
+    </section>
+
+    <section class="map-section">
+
+        <div class="map-title-row">
+            <div>
+                <h2 id="mapTitle">Exports intensity across major economies</h2>
+                <p id="mapSubtitle">Circle size represents magnitude. Circle colour represents movement versus the last recorded value.</p>
+            </div>
+
+            <div class="kpi-strip">
+                <div>
+                    Indicator
+                    <strong id="kpiIndicator">Exports</strong>
+                </div>
+                <div>
+                    Highest
+                    <strong id="kpiHighest">Eurozone</strong>
+                </div>
+                <div>
+                    Average
+                    <strong id="kpiAverage">30.4</strong>
+                </div>
+            </div>
+        </div>
+
+        <div id="worldMap"></div>
+
+        <div class="legend">
+            <div class="legend-item"><span class="legend-dot green"></span>Increase from last recorded value</div>
+            <div class="legend-item"><span class="legend-dot red"></span>Decline from last recorded value</div>
+            <div class="legend-item"><span class="legend-dot blue"></span>Same as last recorded value</div>
+            <div class="legend-item"><span class="legend-dot grey"></span>Other economies</div>
+        </div>
+
+    </section>
+
+    <section class="insight-row">
+        <div class="insight-block">
+            <h3>Executive readout</h3>
+            <p id="readoutText">
+                Macro360 provides a map-led view of economic momentum across selected economies. Use the controls above to switch indicators and compare relative magnitude across countries.
+            </p>
+        </div>
+
+        <button class="powerbi-btn" onclick="openPowerBI()">Open Global Comparative View</button>
+    </section>
+
+</div>
+
+<script>
+const powerBIUrl = "https://app.powerbi.com/reportEmbed?reportId=c11e83d0-1dd5-44e9-a8be-5c0c4171bdac&autoAuth=true&ctid=36da45f1-dd2c-4d1f-af13-5abe46b99921";
+
+const metricLabels = {
+    exports: "Exports",
+    gdp: "GDP Growth",
+    inflation: "Inflation",
+    pmi: "PMI",
+    population: "Population Growth",
+    unemployment: "Unemployment Rate"
+};
+
+const coordinates = {
+    "United States": [-98.5795, 39.8283],
+    "United Kingdom": [-3.4360, 55.3781],
+    "Eurozone": [10.4515, 51.1657],
+    "China": [104.1954, 35.8617],
+    "India": [78.9629, 20.5937]
+};
+
+let selectedMetric = "exports";
+
+const data = [
+    {
+        country: "United States",
+        region: "North America",
+        exports: 29.0,
+        gdp: 2.5,
+        inflation: 3.2,
+        pmi: 51.7,
+        population: 0.5,
+        unemployment: 3.9,
+        movement: "Increase"
+    },
+    {
+        country: "United Kingdom",
+        region: "Europe",
+        exports: 34.0,
+        gdp: 0.7,
+        inflation: 2.8,
+        pmi: 50.9,
+        population: 0.4,
+        unemployment: 4.2,
+        movement: "Stable"
+    },
+    {
+        country: "Eurozone",
+        region: "Europe",
+        exports: 47.0,
+        gdp: 0.9,
+        inflation: 2.5,
+        pmi: 49.8,
+        population: 0.1,
+        unemployment: 6.4,
+        movement: "Decline"
+    },
+    {
+        country: "China",
+        region: "Asia Pacific",
+        exports: 20.0,
+        gdp: 5.2,
+        inflation: 0.2,
+        pmi: 51.1,
+        population: -0.1,
+        unemployment: 5.1,
+        movement: "Decline"
+    },
+    {
+        country: "India",
+        region: "Asia Pacific",
+        exports: 22.0,
+        gdp: 7.1,
+        inflation: 4.6,
+        pmi: 58.3,
+        population: 0.8,
+        unemployment: 7.4,
+        movement: "Increase"
+    }
+];
+
+const chart = echarts.init(document.getElementById("worldMap"));
+
+function getColor(movement) {
+    if (movement === "Increase") return "#86bc25";
+    if (movement === "Decline") return "#e31b2f";
+    if (movement === "Stable") return "#2f80c9";
+    return "#93a0aa";
+}
+
+function getFilteredData() {
+    const region = document.getElementById("regionSelect").value;
+    const movement = document.getElementById("movementSelect").value;
+
+    return data.filter(row => {
+        if (region !== "All" && row.region !== region) return false;
+        if (movement !== "All" && row.movement !== movement) return false;
+        return true;
+    });
+}
+
+function buildMarkerData() {
+    return getFilteredData().map(row => {
+        const coord = coordinates[row.country];
+        return {
+            name: row.country,
+            value: [coord[0], coord[1], Number(row[selectedMetric])],
+            movement: row.movement,
+            itemStyle: {
+                color: getColor(row.movement),
+                borderColor: "#ffffff",
+                borderWidth: 1.4,
+                opacity: 0.95
+            }
+        };
+    });
+}
+
+function renderMap() {
+    const filtered = getFilteredData();
+    const values = filtered.map(row => Number(row[selectedMetric]));
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const displayType = document.getElementById("displaySelect").value;
+
+    const option = {
+        backgroundColor: "#ffffff",
+
+        tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(33,33,33,0.96)",
+            borderColor: "#86bc25",
+            borderWidth: 1,
+            padding: 12,
+            textStyle: {
+                color: "#ffffff",
+                fontFamily: "Inter",
+                fontSize: 12
+            },
+            formatter: function(params) {
+                if (!params.value || params.value.length < 3) return params.name;
+
+                return `
+                    <strong>${params.name}</strong><br/>
+                    ${metricLabels[selectedMetric]}: ${params.value[2]}<br/>
+                    Movement: ${params.data.movement}
+                `;
+            }
+        },
+
+        geo: {
+            map: "world",
+            roam: false,
+            zoom: 1.22,
+            center: [12, 22],
+            silent: false,
+            label: {
+                show: false
+            },
+            itemStyle: {
+                areaColor: "#aeb7bf",
+                borderColor: "#8f9aa3",
+                borderWidth: 0.65
+            },
+            emphasis: {
+                label: {
+                    show: false
+                },
+                itemStyle: {
+                    areaColor: "#9faab3"
+                }
+            }
+        },
+
+        series: [
+            {
+                name: "Magnitude",
+                type: "scatter",
+                coordinateSystem: "geo",
+                data: buildMarkerData(),
+                symbol: "circle",
+                symbolSize: function(value) {
+                    if (displayType === "Compact markers") return 13;
+
+                    const raw = Number(value[2]);
+                    const scaled = 14 + ((raw - minValue) / (maxValue - minValue || 1)) * 38;
+                    return Math.max(14, Math.min(scaled, 52));
+                },
+                zlevel: 2
+            }
+        ]
+    };
+
+    chart.setOption(option, true);
+    updateText();
+}
+
+function updateText() {
+    const filtered = getFilteredData();
+    const values = filtered.map(row => Number(row[selectedMetric]));
+    const average = values.reduce((sum, value) => sum + value, 0) / values.length;
+
+    const highest = filtered.reduce((prev, current) => {
+        return Number(current[selectedMetric]) > Number(prev[selectedMetric]) ? current : prev;
+    }, filtered[0]);
+
+    document.getElementById("mapTitle").innerText =
+        metricLabels[selectedMetric] + " intensity across major economies";
+
+    document.getElementById("kpiIndicator").innerText = metricLabels[selectedMetric];
+    document.getElementById("kpiHighest").innerText = highest ? highest.country : "-";
+    document.getElementById("kpiAverage").innerText = isFinite(average) ? average.toFixed(1) : "-";
+
+    document.getElementById("readoutText").innerText =
+        "The current view compares " + metricLabels[selectedMetric].toLowerCase() +
+        " across selected economies. Marker size indicates relative magnitude, while colour indicates whether the latest value increased, declined or remained stable versus the previous recorded value.";
+}
+
+function openPowerBI() {
+    window.open(powerBIUrl, "_blank");
+}
+
+document.querySelectorAll(".metric-btn").forEach(button => {
+    button.addEventListener("click", function() {
+        document.querySelectorAll(".metric-btn").forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
+        selectedMetric = this.dataset.metric;
+        renderMap();
+    });
+});
+
+document.getElementById("regionSelect").addEventListener("change", renderMap);
+document.getElementById("movementSelect").addEventListener("change", renderMap);
+document.getElementById("displaySelect").addEventListener("change", renderMap);
+document.getElementById("yearSelect").addEventListener("change", renderMap);
+
+window.addEventListener("resize", function() {
+    chart.resize();
+});
+
+renderMap();
+</script>
+
+</body>
+</html>
