@@ -1,179 +1,865 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Macro360 | Global Economic Intelligence</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Macro360</title>
+  <style>
+    :root {
+      --ink: #0b0f0c;
+      --charcoal: #151a17;
+      --graphite: #242925;
+      --stone: #eef1ed;
+      --line: rgba(255,255,255,.12);
+      --soft-line: rgba(11,15,12,.10);
+      --muted: #a8b0aa;
+      --text: #f7faf7;
+      --subtext: #c9d0ca;
+      --green: #86bc25;
+      --green-soft: rgba(134,188,37,.16);
+      --green-line: rgba(134,188,37,.45);
+      --cream: #f6f7f3;
+      --panel: #111613;
+      --shadow: 0 24px 70px rgba(0,0,0,.28);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --font: "Inter", "Segoe UI", Arial, sans-serif;
+    }
 
-https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.jsscript>
-https://cdn.jsdelivr.net/npm/echarts@5/map/js/world.jsscript>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(134,188,37,.20), transparent 25%),
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,.08), transparent 24%),
+        linear-gradient(135deg, #050806 0%, #0a0f0c 48%, #111713 100%);
+      min-height: 100vh;
+    }
 
-<style>
-:root {
-    --black: #060606;
-    --header: #242424;
-    --green: #86bc25;
-    --teal: #35b8b0;
-    --land: #aeb7bf;
-    --land-hover: #9da8b1;
-    --border: #8c969f;
-    --red: #e0202f;
-    --blue: #4a90c2;
-    --text: #101820;
-    --muted: #5f6b76;
-    --white: #ffffff;
+    .page-shell {
+      width: min(1440px, calc(100% - 48px));
+      margin: 0 auto;
+      padding: 26px 0 40px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(5,8,6,.72);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 12px 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 12px 40px rgba(0,0,0,.22);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: .2px;
+      font-weight: 650;
+      color: #ffffff;
+    }
+
+    .brand-dot {
+      width: 12px;
+      height: 12px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 0 8px rgba(134,188,37,.12);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-actions a, .nav-actions button {
+      border: 1px solid var(--line);
+      color: var(--subtext);
+      background: rgba(255,255,255,.04);
+      padding: 10px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .24s ease;
+      font-family: inherit;
+    }
+
+    .nav-actions a:hover, .nav-actions button:hover {
+      color: #ffffff;
+      border-color: var(--green-line);
+      background: var(--green-soft);
+      transform: translateY(-1px);
+    }
+
+    .hero {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-copy, .hero-card, .metric-card, .report-shell, .section-card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.035));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      border-radius: var(--radius-xl);
+      padding: clamp(32px, 5vw, 64px);
+      min-height: 420px;
+      position: relative;
+      overflow: visible;
+      animation: fadeUp .8s ease both;
+    }
+
+    .hero-copy::after {
+      content: "";
+      position: absolute;
+      width: 480px;
+      height: 480px;
+      right: -220px;
+      bottom: -250px;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid var(--green-line);
+      color: #dff2bd;
+      background: var(--green-soft);
+      border-radius: 999px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-weight: 700;
+    }
+     h1{
+    font-size: clamp(34px, 4vw, 56px);
+    line-height:1.08;
+    letter-spacing:-0.02em;
+};
+.hero-copy{
+    min-width:0;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    .green-text { color: var(--green); }
+
+    .hero-copy p {
+      color: var(--subtext);
+      font-size: clamp(15px, 1.4vw, 18px);
+      line-height: 1.7;
+      max-width: 760px;
+      margin: 0;
+    }
+
+    .hero-cta {
+      margin-top: 30px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn, .secondary-btn {
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all .24s ease;
+      font-size: 14px;
+      display: inline-flex;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .primary-btn {
+      background: var(--green);
+      color: #091006;
+      border: 1px solid var(--green);
+    }
+
+    .secondary-btn {
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .primary-btn:hover, .secondary-btn:hover { transform: translateY(-2px); }
+
+    .hero-card {
+      border-radius: var(--radius-xl);
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 420px;
+      animation: fadeUp .9s ease .12s both;
+    }
+
+    .hero-card-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 22px;
+    }
+
+    .hero-card h2 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      font-weight: 680;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      color: #dff2bd;
+      background: rgba(134,188,37,.13);
+      border: 1px solid rgba(134,188,37,.35);
+      padding: 7px 10px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .insight-list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .insight-list li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.16);
+      border-radius: 18px;
+    }
+
+    .icon-dot {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(134,188,37,.14);
+      border: 1px solid rgba(134,188,37,.28);
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .insight-list strong { display: block; font-size: 14px; margin-bottom: 4px; }
+    .insight-list span { color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+
+    .ticker {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .ticker-track {
+      display: inline-block;
+      animation: ticker 22s linear infinite;
+    }
+
+    .metrics-grid {
+      margin: 24px 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .metric-card {
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      animation: fadeUp .8s ease both;
+    }
+    .metric-card:nth-child(2) { animation-delay: .06s; }
+    .metric-card:nth-child(3) { animation-delay: .12s; }
+    .metric-card:nth-child(4) { animation-delay: .18s; }
+
+    .metric-card small {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .metric-card strong {
+      display: block;
+      margin-top: 12px;
+      font-size: 25px;
+      letter-spacing: -0.03em;
+    }
+
+    .metric-card p {
+      margin: 8px 0 0;
+      color: var(--subtext);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+.macro-indicator-card{
+    margin:24px 0;
+    padding:28px;
+    border-radius:var(--radius-xl);
+
+    border:1px solid var(--line);
+
+    background:
+    linear-gradient(
+    180deg,
+    rgba(255,255,255,.07),
+    rgba(255,255,255,.03)
+    );
+
+    box-shadow:var(--shadow);
+}
+.world-map-container{
+    position:relative;
+    width:100%;
+    height:650px;
+
+  background-image:url("min map.jpg");
+
+background-repeat:no-repeat;
+
+background-position:center center;
+
+background-size:80%;
+    border-radius:24px;
+
+    overflow:visible;
+
+    border:1px solid rgba(255,255,255,.08);
 }
 
-body {
-    background: #f4f5f6;
-    font-family: Aptos, "Segoe UI", Arial, sans-serif;
-    color: var(--text);
+.world-map-image{
+
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    opacity:.70;
+
+    filter:grayscale(100%);
+}
+.country-dot{
+
+    position:absolute;
+
+    width:18px;
+    height:18px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    z-index:10;
+
+    transition:.25s ease;
+
+    border:0.6px solid white;
+ opacity:.66;
 }
 
-.page {
-    width: min(1500px, calc(100% - 48px));
-    margin: 28px auto;
-    background: var(--white);
-    border: 1px solid #d9dee4;
-    box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+.country-dot:hover{
+
+    transform:scale(1.25);
+}
+.us{
+    top:40%;
+    left:27%;
+
+    background:#e74c3c;
 }
 
-/* Header */
-.header {
-    background: var(--header);
-    color: var(--white);
-    min-height: 118px;
-    padding: 28px 38px;
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    border-bottom: 4px solid var(--green);
+.uk{
+    top:32%;
+    left:48%;
+
+    background:#e74c3c;
 }
 
-.header h1 {
-    font-size: 34px;
-    font-weight: 600;
-    letter-spacing: -0.8px;
+.eu{
+    top:36%;
+    left:51%;
+
+    background:#e74c3c;
 }
 
-.header p {
-    margin-top: 8px;
-    font-size: 15px;
-    font-weight: 400;
-    color: #c8d0d8;
+.cn{
+    top:43%;
+    left:68%;
+
+    background:#86bc25;
 }
 
-.header button {
-    height: 42px;
-    padding: 0 22px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,0.34);
-    background: transparent;
-    color: var(--white);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
+.tooltip{
+
+    position:absolute;
+
+    bottom:28px;
+
+    left:-40px;
+
+    width:180px;
+
+    background:#111613;
+
+    border:1px solid rgba(134,188,37,.25);
+
+    border-radius:2px;
+
+    padding:6px;
+
+    color:white;
+
+    opacity:0;
+
+    transform:translateY(10px);
+
+    transition:.25s ease;
+
+    pointer-events:none;
+
+    backdrop-filter:blur(5px);
+
+    box-shadow:
+    0 12px 20px rgba(0,0,0,.35);
 }
 
-.header button:hover {
-    border-color: var(--green);
-    color: var(--green);
+.country-dot:hover .tooltip{
+
+    opacity:1;
+
+    transform:translateY(0);
+}
+.country-filter{
+
+    background:rgba(66,183,178,.15);
+
+    border:1px solid rgba(66,183,178,.45);
+
+    color:teal;
+
+    padding:2px 2px;
+
+    border-radius:999px;
+
+    font-weight:40;
+
+    cursor:circle;
+
+    transition:.25s ease;
 }
 
-/* Controls */
-.controls {
-    background: var(--black);
-    padding: 22px 38px 24px;
-    border-bottom: 4px solid var(--green);
+.country-filter:hover{
+
+    background:#86bc25;
+
+    color:#111;
+
+    transform:translateY(-2px);
 }
 
-.metric-row {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-bottom: 22px;
+.indicator-tabs button{
+
+    background:#222;
+
+    color:white;
+
+    border:none;
 }
 
-.metric {
-    height: 42px;
-    border: 1px solid #252a2e;
-    background: var(--teal);
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
+
+    .dashboard-area {
+      margin-top: 26px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 18px;
+      margin-bottom: 14px;
+    }
+
+    .section-header h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: -0.04em;
+    }
+
+    .section-header p {
+      color: var(--muted);
+      margin: 8px 0 0;
+      max-width: 760px;
+      line-height: 1.55;
+    }
+
+    .tab-strip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tab-strip button {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--subtext);
+      padding: 10px 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s ease;
+      font-family: inherit;
+      font-size: 13px;
+    }
+
+    .tab-strip button.active, .tab-strip button:hover {
+      border-color: var(--green-line);
+      background: var(--green-soft);
+      color: #fff;
+    }
+
+    .report-shell {
+      border-radius: var(--radius-xl);
+      padding: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,.05);
+    }
+
+    .report-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      color: var(--muted);
+      padding: 4px 6px 14px;
+      font-size: 12px;
+    }
+
+    .report-frame-wrap {
+      width: 100%;
+      height: min(78vh, 840px);
+      min-height: 620px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #0f120f;
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #101410;
+    }
+
+    .footer-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .section-card {
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .section-card h3 { margin: 0 0 8px; font-size: 16px; }
+    .section-card p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px; }
+
+    .edit-note {
+      color: #dce7d9;
+      background: rgba(134,188,37,.10);
+      border: 1px solid rgba(134,188,37,.28);
+      padding: 12px 14px;
+      border-radius: 16px;
+      margin-top: 16px;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+.country-filter{
+
+    background:rgba(66,183,178,.15);
+
+    border:1px solid rgba(66,183,178,.45);
+
+    color:white;
+
+    padding:16px 10px;
+
+    border-radius:200px;
+
+    font-weight:40;
+
+    cursor:pointer;
+
+    transition:.25s;
 }
 
-.metric.active {
-    background: #333333;
-    border-color: var(--green);
-    box-shadow: inset 0 -3px 0 var(--green);
+.indicator-tabs{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:4px;
 }
 
-.filter-row {
-    display: grid;
-    grid-template-columns: 180px 220px 220px 220px 1fr;
-    gap: 22px;
-    align-items: end;
+.indicator-tabs button{
+
+    background:#2a2c2c;
+
+    color:white;
+
+    border:none;
+
+    padding:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
 }
 
-.filter label {
-    display: block;
-    margin-bottom: 8px;
-    color: #f1f4f6;
-    font-size: 13px;
-    font-weight: 500;
-}
 
-.filter select {
-    width: 100%;
-    height: 44px;
-    background: #ffffff;
-    border: 1px solid #cfd5da;
-    border-radius: 3px;
-    color: #19232d;
-    font-size: 14px;
-    font-weight: 400;
-    padding: 0 12px;
-}
 
-.source {
-    justify-self: end;
-    height: 38px;
-    min-width: 235px;
-    padding: 0 18px;
-    border-radius: 999px;
-    background: rgba(134,188,37,0.14);
-    color: #d8eea0;
-    border: 1px solid rgba(134,188,37,0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 500;
-}
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-/* Map block */
-.map-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: start;
-    gap: 20px;
-    padding: 26px 38px 8px;
-    background: #ffffff;
-}
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
 
-.map-header h2 {
-    font-size: 23px;
-    font-weight: 600;
-    letter-spacing: -0.4px;
-    color: #101820;
-}
+    @media (max-width: 1080px) {
+      .hero{
+    display:grid;
+    grid-template-columns:50% 50%;
+    gap:24px;
+}      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
+      .section-header { align-items: flex-start; flex-direction: column; }
+      .tab-strip { justify-content: flex-start; }
+    }
 
-.map-
+    @media (max-width: 680px) {
+      .page-shell { width: min(100% - 24px, 1440px); padding-top: 14px; }
+      .topbar { border-radius: 22px; align-items: flex-start; flex-direction: column; }
+      .nav-actions { justify-content: flex-start; margin-top: 12px; }
+      .hero-copy, .hero-card { min-height: auto; padding: 26px; }
+      .metrics-grid { grid-template-columns: 1fr; }
+      .report-frame-wrap { min-height: 560px; height: 72vh; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="topbar" aria-label="Dashboard navigation">
+      <div class="brand"><span class="brand-dot"></span> Macro360</div>
+      <nav class="nav-aactions">
+        <a href="#overview">Eagle Eye</a>
+        <a href="#dashboard">View Dashboard</a>
+        <a href="#method">Methodology</a>
+        <button type="button" onclick="toggleFullscreen()">Focus view</button>
+      </nav>
+    </header>
+
+    <section class="hero" id="overview">
+      <div class="hero-copy">
+        <span class="eyebrow">Executive macro intelligence</span>
+        <h1>Macroeconomic signals to <span class="green-text">efficient business solutions</span>.</h1>
+        <p>
+          A formal landing experience for your Power BI macro dashboard, designed with a restrained Deloitte-inspired palette, controlled motion, and enough breathing room for leadership storytelling.
+        </p>
+        <div class="hero-cta">
+          <a class="primary-btn" href="#dashboard">Open embedded report →</a>
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="Dashboard summary card">
+        <div>
+          <div class="hero-card-title">
+            <h2>What this dashboard helps answer?</h2>
+          </div>
+          <ul class="insight-list">
+            <li><span class="icon-dot">01</span><div><strong>Macro temperature</strong><span>Track growth, inflation, labor, monetary and external-sector signals across priority economies.</span></div></li>
+            <li><span class="icon-dot">02</span><div><strong>Sector implications</strong><span>Translate indicator moves into practical implications for Mining & Metals, Industrial Products, and Construction.</span></div></li>
+            <li><span class="icon-dot">03</span><div><strong>Executive navigation</strong><span>Use tabs below to route users to the relevant Power BI page without crowding the hero section.</span></div></li>
+          </ul>
+        </div>
+        <div class="ticker" aria-label="Scrolling macro themes">
+          <span class="ticker-track">GDP growth • Inflation • Interest rates • Unemployment • Exports • Manufacturing • Commodity demand • Fiscal pulse • GDP growth • Inflation • Interest rates • Unemployment • Exports • Manufacturing • Commodity demand • Fiscal pulse • </span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="metrics-grid" aria-label="Macro dashboard pillars">
+      <article class="metric-card"><small>Pillar 01</small><strong>Global read</strong><p>High-level comparison across major economies and economic cycles.</p></article>
+      <article class="metric-card"><small>Pillar 02</small><strong>Country pulse</strong><p>Country-specific macro momentum and risk indicators.</p></article>
+      <article class="metric-card"><small>Pillar 03</small><strong>Sector lens</strong><p>Sectoral interpretation layered on top of macro direction.</p></article>
+      <article class="metric-card"><small>Pillar 04</small><strong>Action view</strong><p>Board-ready narrative cues for stakeholder conversations.</p></article>
+    </section>
+
+<section class="macro-indicator-card">
+
+<span class="eyebrow">
+GLOBAL MACRO INDICATORS
+</span>
+
+<h2>
+What do global indicators say?
+</h2>
+
+<p>
+Monitor relative macroeconomic performance across priority economies and understand direction of change at a glance.
+</p>
+
+
+
+<div class="indicator-tabs">
+
+<button>Exports (% GDP)</button>
+<button class="active">GDP Growth (%)</button>
+<button>Inflation (%)</button>
+<button>PMI</button>
+<button>Population Growth (%)</button>
+<button>Unemployment (%)</button>
+
+</div>
+
+<div class="world-map-container">
+
+    <div class="country-dot us">
+        <div class="tooltip">
+            <strong>United States</strong>
+            <span>GDP Growth: 2.1%</span>
+        </div>
+    </div>
+
+    <div class="country-dot uk">
+        <div class="tooltip">
+            <strong>United Kingdom</strong>
+            <span>GDP Growth: 0.8%</span>
+        </div>
+    </div>
+
+    <div class="country-dot eu">
+        <div class="tooltip">
+            <strong>Eurozone</strong>
+            <span>GDP Growth: 1.1%</span>
+        </div>
+    </div>
+
+    <div class="country-dot cn">
+        <div class="tooltip">
+            <strong>China</strong>
+            <span>GDP Growth: 4.8%</span>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-area" id="dashboard">
+
+    <section class="dashboard-area" id="dashboard">
+      <div class="section-header">
+        <div>
+          <span class="eyebrow">Embedded Power BI workspace</span>
+          <h2>Interactive report canvas</h2>
+          <p>Keep the landing page light and let the report do the analytical heavy lifting. Replace the placeholder page IDs in the buttons when you know each Power BI page name.</p>
+        </div>
+        <div class="tab-strip" aria-label="Power BI page tabs">
+          <button class="active" data-page="">Full report</button>
+          <button data-page="ReportSection">Overview</button>
+          <button data-page="ReportSectionCountry">Country view</button>
+          <button data-page="ReportSectionSector">Sector view</button>
+        </div>
+      </div>
+
+      <div class="report-shell" id="reportShell">
+        <div class="report-meta">
+          <span>Secure report embed. Viewers will still need Power BI access.</span>
+          <span id="frameLabel">Full report</span>
+        </div>
+        <div class="report-frame-wrap">
+          <iframe
+            id="pbiFrame"
+            title="Power BI Macro Dashboard"
+            src="https://app.powerbi.com/reportEmbed?reportId=c11e83d0-1dd5-44e9-a8be-5c0c4171bdac&autoAuth=true&ctid=36da45f1-dd2c-4d1f-af13-5abe46b99921&actionBarEnabled=true"
+            allowfullscreen="true">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="edit-note">
+        Tip: in Power BI Service, open a specific report page and copy the final ReportSection value from the URL. Paste it into each button's data-page value to make the tabs jump directly to your selected pages.
+      </div>
+    </section>
+
+    <section class="footer-grid" id="method">
+      <article class="section-card"><h3>Design tone</h3><p>Black and graphite base, controlled green accents, thin borders, subtle glass panels, and no overly bright gradients.</p></article>
+      <article class="section-card"><h3>Fit behavior</h3><p>The iframe fills the available width and uses a controlled viewport height so your existing Power BI pages remain directly visible inside the dashboard.</p></article>
+      <article class="section-card"><h3>Where to edit</h3><p>Update title text, pillar cards, and tab page names only. Everything else is already responsive and presentation-ready.</p></article>
+    </section>
+  </main>
+
+  <script>
+    const baseUrl = "https://app.powerbi.com/reportEmbed?reportId=c11e83d0-1dd5-44e9-a8be-5c0c4171bdac&autoAuth=true&ctid=36da45f1-dd2c-4d1f-af13-5abe46b99921&actionBarEnabled=true";
+    const frame = document.getElementById("pbiFrame");
+    const label = document.getElementById("frameLabel");
+    const buttons = document.querySelectorAll(".tab-strip button");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        buttons.forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+        const page = button.dataset.page;
+        const pageUrl = page ? `${baseUrl}&pageName=${encodeURIComponent(page)}` : baseUrl;
+        frame.src = pageUrl;
+        label.textContent = button.textContent.trim();
+      });
+    });
+
+    function toggleFullscreen() {
+      const reportShell = document.getElementById("reportShell");
+      if (!document.fullscreenElement) {
+        reportShell.requestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+      }
+    }
+  </script>
+</body>
+</html>
